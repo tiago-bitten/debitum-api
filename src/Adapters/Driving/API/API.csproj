@@ -6,4 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Driven\Infra.Mongo\Infra.Mongo.csproj" />
+    </ItemGroup>
+
 </Project>

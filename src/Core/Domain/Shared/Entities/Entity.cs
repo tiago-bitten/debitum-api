@@ -2,6 +2,7 @@
 
 public abstract class Entity
 {
-    public string Id { get; private set; } = string.Empty;
-    public DateTimeOffset CreatedAt { get; private set; }
+    public string Id { get; protected set; } = string.Empty;
+    public string PublicId { get; protected set; } = string.Empty;
+    public DateTimeOffset CreatedAt { get; protected set; }
 }
