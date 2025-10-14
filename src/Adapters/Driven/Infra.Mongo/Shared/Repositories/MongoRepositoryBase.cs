@@ -24,7 +24,6 @@ public abstract class MongoRepositoryBase<TDocument, TEntity>(
     public virtual async Task AddAsync(TEntity entity)
     {
         var document = ToDocument(entity);
-        document.PublicId = $"{entity.GetType().Name.ToLower()}_{Guid.CreateVersion7():N}";
         await Collection.InsertOneAsync(document);
 
         await PublishEventsAsync(entity);

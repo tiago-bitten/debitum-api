@@ -23,7 +23,7 @@ internal sealed class CreateCustomerHandler(ICustomerRepository customerReposito
 
         var phone = phoneResult.Value;
 
-        var customerResult = Customer.Create(command.Name, email, phone);
+        var customerResult = Customer.Create(command.Name, email, phone, command.origem);
         if (customerResult.IsFailure)
             return customerResult.Error;
 
