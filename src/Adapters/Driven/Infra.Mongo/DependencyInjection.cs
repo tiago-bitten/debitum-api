@@ -1,12 +1,14 @@
 ﻿using Application.Customers.Ports;
+using Infra.Mongo.Customers.Repositories;
+using Infra.Mongo.Shared.Events;
+using Infra.Mongo.Shared.Options;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
-using Infra.Mongo.Customers.Repositories;
-using Infra.Mongo.Shared.Options;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Configuration;
 
 namespace Infra.Mongo;
 
@@ -17,6 +19,7 @@ public static class DependencyInjection
         services.AddCustomOptions(configuration);
         services.AddDatabase();
         services.AddRepositories();
+        services.AddServices();
 
         return services;
     }
@@ -27,19 +30,19 @@ public static class DependencyInjection
             .Bind(configuration.GetSection("Database:Mongo"))
             .ValidateDataAnnotations()
             .ValidateOnStart();
-        
+
         return services;
     }
 
     private static IServiceCollection AddDatabase(this IServiceCollection services)
     {
-        BsonSerializer.RegisterSerializer(new GuidSerializer(MongoDB.Bson.GuidRepresentation.Standard));
+        BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
         services.AddSingleton<IMongoClient>(sp =>
         {
             var options = sp.GetRequiredService<IOptions<MongoDbOptions>>().Value;
             var settings = MongoClientSettings.FromConnectionString(options.ConnectionString);
-            
+
             return new MongoClient(settings);
         });
 
@@ -56,6 +59,14 @@ public static class DependencyInjection
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddScoped<IEventsDispatcher, EventsDispatcher>();
+
         return services;
     }
 }
