@@ -1,5 +1,6 @@
 ﻿using Domain.Customers.Enums;
 using Domain.Customers.Errors;
+using Domain.Customers.Events;
 using Domain.Shared.Entities;
 using Domain.Shared.Results;
 using Domain.Shared.ValueObjects;
@@ -25,7 +26,10 @@ public sealed class Customer : EntityDeletable
         if (string.IsNullOrEmpty(name))
             return CustomerErrors.NameRequired;
 
-        return new Customer(name, email, phone, origem);
+        var customer = new Customer(name, email, phone, origem);
+        customer.Raise(new CustomerCreatedEvent(customer.PublicId));
+
+        return customer;
     }
 
     public static Customer Load(
