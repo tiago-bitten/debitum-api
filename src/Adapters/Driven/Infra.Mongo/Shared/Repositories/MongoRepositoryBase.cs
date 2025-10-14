@@ -37,6 +37,14 @@ public abstract class MongoRepositoryBase<TDocument, TEntity>(
         return document is null ? null : ToDomain(document);
     }
 
+    public virtual async Task<TEntity?> GetByPublicIdAsync(string publicId)
+    {
+        var filter = Builders<TDocument>.Filter.Eq(d => d.PublicId, publicId);
+        var document = await Collection.Find(filter).FirstOrDefaultAsync();
+
+        return document is null ? null : ToDomain(document);
+    }
+
     public virtual async Task UpdateAsync(TEntity entity)
     {
         var document = ToDocument(entity);
@@ -54,7 +62,7 @@ public abstract class MongoRepositoryBase<TDocument, TEntity>(
 
     private Task PublishEventsAsync(Entity entity, CancellationToken cancellationToken = default)
     {
-        var events = entity.Events;
+        var events = entity.Events.ToList();
         entity.ClearEvents();
 
         return eventsDispatcher.DispatchAsync(events, cancellationToken);

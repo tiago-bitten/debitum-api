@@ -1,4 +1,5 @@
 ﻿using Application.Customers.Ports;
+using Domain.Shared.Events;
 using Infra.Mongo.Customers.Repositories;
 using Infra.Mongo.Shared.Events;
 using Infra.Mongo.Shared.Extensions;
@@ -67,7 +68,14 @@ public static class DependencyInjection
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddScoped<IEventsDispatcher, EventsDispatcher>();
+        services.AddTransient<IEventsDispatcher, EventsDispatcher>();
+
+        var applicationAssembly = typeof(Application.DependencyInjection).Assembly;
+        services.Scan(scan => scan.FromAssemblies(applicationAssembly)
+            .AddClasses(classes => classes.AssignableTo(typeof(IEventHandler<>)), publicOnly: false)
+            .AsImplementedInterfaces()
+            .WithScopedLifetime());
+
 
         return services;
     }
