@@ -1,6 +1,7 @@
 ﻿using Application.Customers.Ports;
 using Infra.Mongo.Customers.Repositories;
 using Infra.Mongo.Shared.Events;
+using Infra.Mongo.Shared.Extensions;
 using Infra.Mongo.Shared.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfraMongo(this IServiceCollection services, IConfiguration configuration)
     {
+        MongoDbConventions.RegisterConventions();
+        BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
+
         services.AddCustomOptions(configuration);
         services.AddDatabase();
         services.AddRepositories();
@@ -36,8 +40,6 @@ public static class DependencyInjection
 
     private static IServiceCollection AddDatabase(this IServiceCollection services)
     {
-        BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
-
         services.AddSingleton<IMongoClient>(sp =>
         {
             var options = sp.GetRequiredService<IOptions<MongoDbOptions>>().Value;

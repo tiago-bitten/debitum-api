@@ -1,47 +1,29 @@
-version: '3.8'
-
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: debitum-mongodb
+  mongo:
+    image: mongo:7.0
+    container_name: debitum-mongo
     restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: user
-      MONGO_INITDB_ROOT_PASSWORD: password
-      MONGO_INITDB_DATABASE: DebitumDb
     ports:
       - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+      MONGO_INITDB_DATABASE: DebitumDb
     volumes:
-      - mongo-data:/data/db
+      - mongo_data:/data/db
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile.dockerfile
+    build: .
     container_name: debitum-api
     restart: always
+    depends_on:
+      - mongo
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - MongoDbOptions__ConnectionString=mongodb://user:password@mongodb:27017
-      - MongoDbOptions__DatabaseName=DebitumDb
-      - WhatsappApiSettings__BaseUrl=http://evolution-api:8080/
-      - WhatsappApiSettings__ApiKey=SECRET_EVOLUTION_KEY
-    
+      ASPNETCORE_ENVIRONMENT: Development
+      MongoDb__ConnectionString: "mongodb://root:rootpassword@mongo:27017"
+      MongoDb__DatabaseName: "DebitumDb"
     ports:
       - "5000:8080"
-    depends_on:
-      - mongodb
-      - evolution-api
-
-  evolution-api:
-    image: atendai/evolution-api:latest
-    container_name: debitum-evolution-api-mock
-    ports:
-      - "8081:8080"
-    environment:
-      - AUTHENTICATION_API_KEY=Secret
-    restart: always
 
 volumes:
-  mongo-data:
-    driver: local
+  mongo_data:

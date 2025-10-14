@@ -1,4 +1,6 @@
-﻿namespace API;
+﻿using System.Text.Json.Serialization;
+
+namespace API;
 
 internal static class DependencyInjection
 {
@@ -8,6 +10,7 @@ internal static class DependencyInjection
         services.AddCustomCors();
         services.AddProblemDetails();
         services.AddEndpointsApiExplorer();
+        services.AddJsonSerializerOptions();
 
         return services;
     }
@@ -20,6 +23,13 @@ internal static class DependencyInjection
                 .SetIsOriginAllowed(_ => true)
                 .AllowCredentials()
         ));
+
+        return services;
+    }
+
+    private static IServiceCollection AddJsonSerializerOptions(this IServiceCollection services)
+    {
+        services.ConfigureHttpJsonOptions(x => { x.SerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
 
         return services;
     }
