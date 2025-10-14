@@ -1,12 +1,14 @@
 using System.Reflection;
 using API;
 using API.Extensions;
+using Application;
 using Infra.Mongo;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddInfraMongo(builder.Configuration)
+    .AddApplication()
     .AddAPI();
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
