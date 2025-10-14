@@ -7,24 +7,17 @@ using MongoDB.Driver;
 
 namespace Infra.Mongo.Customers.Repositories;
 
-public class CustomerRepository(IMongoDatabase database)
+internal sealed class CustomerRepository(IMongoDatabase database)
     : MongoRepositoryBase<CustomerDocument, Customer>(database, "Customers"), ICustomerRepository
 {
-    protected override Customer ToDomain(CustomerDocument document)
-    {
-        return document.ToDomain();
-    }
-
-    protected override CustomerDocument ToDocument(Customer entity)
-    {
-        return entity.ToDocument();
-    }
+    protected override Customer ToDomain(CustomerDocument document) => document.ToDomain();
+    protected override CustomerDocument ToDocument(Customer entity) => entity.ToDocument();
 
     public async Task<Customer?> GetByEmailAsync(string email)
     {
         var filter = Builders<CustomerDocument>.Filter.Eq(d => d.Email, email);
         var document = await Collection.Find(filter).FirstOrDefaultAsync();
-        
+
         return document is null ? null : ToDomain(document);
     }
 }

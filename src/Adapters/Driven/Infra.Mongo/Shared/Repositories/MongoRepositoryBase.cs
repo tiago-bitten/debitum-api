@@ -1,9 +1,9 @@
 ﻿// Projeto: Infra.Mongo/Shared/Repositories/MongoRepositoryBase.cs
 
 using Application.Shared.Ports;
-using MongoDB.Driver;
 using Domain.Shared.Entities;
 using Infra.Mongo.Shared.Documents;
+using MongoDB.Driver;
 
 namespace Infra.Mongo.Shared.Repositories;
 
@@ -20,6 +20,7 @@ public abstract class MongoRepositoryBase<TDocument, TEntity>(IMongoDatabase dat
     public virtual async Task AddAsync(TEntity entity)
     {
         var document = ToDocument(entity);
+        document.PublicId = $"{entity.GetType().Name.ToLower()}_{Guid.CreateVersion7():N}";
         await Collection.InsertOneAsync(document);
     }
 
