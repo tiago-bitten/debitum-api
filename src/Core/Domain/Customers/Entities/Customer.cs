@@ -23,4 +23,21 @@ public sealed class Customer : EntityDeletable
 
         return new Customer(name, email, phone);
     }
+
+    public static Customer Load(
+        string id,
+        string publicId,
+        DateTimeOffset createdAt,
+        string name,
+        Email email,
+        Phone phone)
+        => new()
+        {
+            Id = id,
+            PublicId = publicId,
+            Name = name,
+            Email = email,
+            Phone = phone,
+            CreatedAt = createdAt
+        };
 }
