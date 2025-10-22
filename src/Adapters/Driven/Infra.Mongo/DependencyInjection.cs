@@ -1,4 +1,5 @@
 ﻿using Application.Customers.Ports;
+using Application.Shared.Ports;
 using Domain.Shared.Events;
 using Infra.Mongo.Customers.Repositories;
 using Infra.Mongo.Shared.Events;
