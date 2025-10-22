@@ -1,6 +1,6 @@
-﻿using Domain.Shared.Events;
+using Domain.Shared.Events;
 
-namespace Infra.Mongo.Shared.Events;
+namespace Application.Shared.Ports;
 
 public interface IEventsDispatcher
 {

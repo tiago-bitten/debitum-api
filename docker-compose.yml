@@ -1,29 +1,28 @@
 services:
-  mongo:
-    image: mongo:7.0
-    container_name: debitum-mongo
+  postgres:
+    image: postgres:16-alpine
+    container_name: debitum-postgres
     restart: always
     ports:
-      - "27017:27017"
+      - "5432:5432"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
-      MONGO_INITDB_DATABASE: DebitumDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: DebitumDb
     volumes:
-      - mongo_data:/data/db
+      - postgres_data:/var/lib/postgresql/data
 
   app:
     build: .
     container_name: debitum-api
     restart: always
     depends_on:
-      - mongo
+      - postgres
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      MongoDb__ConnectionString: "mongodb://root:rootpassword@mongo:27017"
-      MongoDb__DatabaseName: "DebitumDb"
+      Database__Postgres__ConnectionString: "Host=postgres;Port=5432;Database=DebitumDb;Username=postgres;Password=postgres"
     ports:
       - "5000:8080"
 
 volumes:
-  mongo_data:
+  postgres_data:

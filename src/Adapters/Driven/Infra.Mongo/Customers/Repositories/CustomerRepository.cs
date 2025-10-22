@@ -1,8 +1,8 @@
 ﻿using Application.Customers.Ports;
+using Application.Shared.Ports;
 using Domain.Customers.Entities;
 using Infra.Mongo.Customers.Documents;
 using Infra.Mongo.Customers.Mappers;
-using Infra.Mongo.Shared.Events;
 using Infra.Mongo.Shared.Repositories;
 using MongoDB.Driver;
 
