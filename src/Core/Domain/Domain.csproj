@@ -10,4 +10,8 @@
       <Folder Include="Customers\ValueObjects\" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="Tests"/>
+    </ItemGroup>
+
 </Project>
