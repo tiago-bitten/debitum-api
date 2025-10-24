@@ -27,9 +27,6 @@ public sealed class Debt : Entity
         if (amount <= 0)
             return DebtErrors.AmountInvalid;
 
-        if (dueDate < DateTime.UtcNow.Date)
-            return DebtErrors.DueDateInvalid;
-
         return new Debt(amount, dueDate, description);
     }
 
