@@ -11,7 +11,6 @@ public sealed class DebitumDbContext(DbContextOptions<DebitumDbContext> options)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Apply all entity configurations from this assembly
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DebitumDbContext).Assembly);
     }
 }

@@ -12,17 +12,49 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  evolution-api:
+    image: atendai/evolution-api:latest
+    container_name: debitum-evolution-api
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      SERVER_URL: http://localhost:8080
+
+      AUTHENTICATION_API_KEY: change-this-super-secret-key
+
+      DATABASE_ENABLED: true
+      DATABASE_PROVIDER: postgresql
+      DATABASE_CONNECTION_URI: postgresql://postgres:postgres@postgres:5432/EvolutionDb
+      DATABASE_SAVE_DATA_INSTANCE: true
+      DATABASE_SAVE_DATA_NEW_MESSAGE: true
+      DATABASE_SAVE_MESSAGE_UPDATE: true
+      DATABASE_SAVE_DATA_CONTACTS: true
+      DATABASE_SAVE_DATA_CHATS: true
+
+      WEBHOOK_GLOBAL_ENABLED: false
+
+      DEL_INSTANCE: false
+    depends_on:
+      - postgres
+    volumes:
+      - evolution_instances:/evolution/instances
+
   app:
     build: .
     container_name: debitum-api
     restart: always
     depends_on:
       - postgres
+      - evolution-api
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       Database__Postgres__ConnectionString: "Host=postgres;Port=5432;Database=DebitumDb;Username=postgres;Password=postgres"
+      WhatsApp__Evolution__BaseUrl: "http://evolution-api:8080"
+      WhatsApp__Evolution__ApiKey: "change-this-super-secret-key"
     ports:
       - "5000:8080"
 
 volumes:
   postgres_data:
+  evolution_instances:

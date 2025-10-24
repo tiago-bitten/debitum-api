@@ -4,9 +4,9 @@ namespace Application.Shared.Ports;
 
 public interface IRepository<TEntity> where TEntity : Entity
 {
-    Task AddAsync(TEntity entity);
-    Task<TEntity?> GetByIdAsync(string id);
-    Task<TEntity?> GetByPublicIdAsync(string publicId);
+    Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);
+    Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<TEntity?> GetByPublicIdAsync(string publicId, CancellationToken cancellationToken = default);
     Task UpdateAsync(TEntity entity);
-    Task DeleteAsync(string id);
+    Task DeleteAsync(Guid id);
 }

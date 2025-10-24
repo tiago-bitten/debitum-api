@@ -24,8 +24,9 @@ namespace Infra.Postgres.Migrations
 
             modelBuilder.Entity("Domain.Customers.Entities.Customer", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
@@ -50,11 +51,11 @@ namespace Infra.Postgres.Migrations
                         .HasColumnType("character varying(200)")
                         .HasColumnName("name");
 
-                    b.Property<string>("Origem")
+                    b.Property<string>("Origin")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("origem");
+                        .HasColumnName("origin");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -77,6 +78,9 @@ namespace Infra.Postgres.Migrations
 
                     b.HasIndex("PublicId")
                         .IsUnique();
+
+                    b.HasIndex("Id", "CreatedAt")
+                        .IsDescending();
 
                     b.ToTable("customers", (string)null);
                 });
