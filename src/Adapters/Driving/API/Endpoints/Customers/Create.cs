@@ -9,7 +9,7 @@ namespace API.Endpoints.Customers;
 
 internal sealed class Create : IEndpoint
 {
-    public sealed record Request(string Name, string Email, string Phone, CustomerOrigem Origem);
+    public sealed record Request(string Name, string Email, string Phone, CustomerOrigin Origem);
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

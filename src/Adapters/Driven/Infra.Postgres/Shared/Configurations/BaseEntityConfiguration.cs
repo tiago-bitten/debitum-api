@@ -13,9 +13,9 @@ public abstract class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguratio
 
         builder.Property(e => e.Id)
             .HasColumnName("id")
+            .HasColumnType("uuid")
             .IsRequired();
 
-        // Configure property access mode to allow EF Core to set private/protected setters
         builder.Property(e => e.Id)
             .Metadata.SetPropertyAccessMode(PropertyAccessMode.Field);
 
@@ -37,7 +37,9 @@ public abstract class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguratio
         builder.Property(e => e.CreatedAt)
             .Metadata.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-        // Ignore the Events collection (not mapped to database)
+        builder.HasIndex(x => new { x.Id, x.CreatedAt })
+            .IsDescending(true, true);
+
         builder.Ignore(e => e.Events);
     }
 }

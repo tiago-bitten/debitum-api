@@ -2,4 +2,4 @@
 
 namespace Domain.Customers.Events;
 
-public sealed record CustomerCreatedEvent(string PublicId) : IEvent;
+public sealed record CustomerCreatedEvent(Guid Id) : IEvent;

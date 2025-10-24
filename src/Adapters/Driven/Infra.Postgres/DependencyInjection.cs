@@ -39,18 +39,12 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         var connectionString = configuration.GetSection("Database:Postgres:ConnectionString").Value
-            ?? throw new InvalidOperationException("PostgreSQL connection string is not configured");
+                               ?? throw new InvalidOperationException("PostgreSQL connection string is not configured");
 
         services.AddDbContext<DebitumDbContext>(options =>
         {
-            options.UseNpgsql(connectionString, npgsqlOptions =>
-            {
-                npgsqlOptions.MigrationsAssembly(typeof(DebitumDbContext).Assembly.FullName);
-                npgsqlOptions.EnableRetryOnFailure(
-                    maxRetryCount: 3,
-                    maxRetryDelay: TimeSpan.FromSeconds(5),
-                    errorCodesToAdd: null);
-            });
+            options.UseNpgsql(connectionString,
+                npgsqlOptions => { npgsqlOptions.MigrationsAssembly(typeof(DebitumDbContext).Assembly.FullName); });
 
             options.EnableSensitiveDataLogging(false);
             options.EnableDetailedErrors(false);
@@ -68,6 +62,7 @@ public static class DependencyInjection
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IEventsDispatcher, EventsDispatcher>();
 
         return services;

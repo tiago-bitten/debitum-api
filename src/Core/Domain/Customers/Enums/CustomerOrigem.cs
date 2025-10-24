@@ -1,6 +1,6 @@
 ﻿namespace Domain.Customers.Enums;
 
-public enum CustomerOrigem
+public enum CustomerOrigin
 {
     WhatsApp,
     Web

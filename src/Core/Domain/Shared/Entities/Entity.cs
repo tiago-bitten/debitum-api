@@ -13,7 +13,7 @@ public abstract class Entity
         PublicId = GenerateId();
     }
 
-    public string Id { get; protected init; } = string.Empty;
+    public Guid Id { get; protected init; } = Guid.CreateVersion7();
     public string PublicId { get; protected init; }
     public DateTimeOffset CreatedAt { get; protected init; } = DateTimeOffset.UtcNow;
 

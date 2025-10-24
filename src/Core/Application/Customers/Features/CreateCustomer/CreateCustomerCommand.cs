@@ -3,4 +3,4 @@ using Domain.Customers.Enums;
 
 namespace Application.Customers.Features.CreateCustomer;
 
-public sealed record CreateCustomerCommand(string Name, string Email, string Phone, CustomerOrigem origem) : ICommand;
+public sealed record CreateCustomerCommand(string Name, string Email, string Phone, CustomerOrigin origem) : ICommand;

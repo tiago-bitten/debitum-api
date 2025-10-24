@@ -20,6 +20,8 @@ internal sealed class EventsDispatcher(IServiceProvider serviceProvider) : IEven
 
             foreach (var handler in handlers)
             {
+                if (handler is null) continue;
+
                 var handlerWrapper = HandlerWrapper.Create(handler, domainEventType);
                 await handlerWrapper.HandleAsync(@event, cancellationToken);
             }

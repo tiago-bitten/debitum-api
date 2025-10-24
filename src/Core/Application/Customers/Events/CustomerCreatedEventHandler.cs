@@ -9,10 +9,10 @@ internal sealed class CustomerCreatedEventHandler(ICustomerRepository customerRe
 {
     public async Task HandleAsync(CustomerCreatedEvent @event, CancellationToken cancellationToken)
     {
-        var customer = await customerRepository.GetByIdAsync(@event.PublicId);
+        var customer = await customerRepository.GetByIdAsync(@event.Id);
         if (customer is null)
         {
-            Console.WriteLine($"Customer {@event.PublicId} not found.");
+            Console.WriteLine($"Customer {@event.Id} not found.");
         }
     }
 }

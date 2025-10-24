@@ -13,41 +13,22 @@ public sealed class Customer : EntityDeletable
     {
     }
 
-    private Customer(string name, Email email, Phone phone, CustomerOrigem origem)
-        => (Name, Email, Phone, Origem) = (name, email, phone, origem);
+    private Customer(string name, Email email, Phone phone, CustomerOrigin origin)
+        => (Name, Email, Phone, Origin) = (name, email, phone, origin);
 
     public string Name { get; private set; } = string.Empty;
     public Email Email { get; private set; } = null!;
     public Phone Phone { get; private set; } = null!;
-    public CustomerOrigem Origem { get; private set; }
+    public CustomerOrigin Origin { get; private set; }
 
-    public static Result<Customer> Create(string name, Email email, Phone phone, CustomerOrigem origem)
+    public static Result<Customer> Create(string name, Email email, Phone phone, CustomerOrigin origin)
     {
         if (string.IsNullOrEmpty(name))
             return CustomerErrors.NameRequired;
 
-        var customer = new Customer(name, email, phone, origem);
-        customer.Raise(new CustomerCreatedEvent(customer.PublicId));
+        var customer = new Customer(name, email, phone, origin);
+        customer.Raise(new CustomerCreatedEvent(customer.Id));
 
         return customer;
     }
-
-    public static Customer Load(
-        string id,
-        string publicId,
-        DateTimeOffset createdAt,
-        string name,
-        Email email,
-        Phone phone,
-        CustomerOrigem origem)
-        => new()
-        {
-            Id = id,
-            PublicId = publicId,
-            Name = name,
-            Email = email,
-            Phone = phone,
-            Origem = origem,
-            CreatedAt = createdAt
-        };
 }

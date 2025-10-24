@@ -23,7 +23,6 @@ internal sealed class CustomerConfiguration : BaseDeletableEntityConfiguration<C
         builder.Property(c => c.Name)
             .Metadata.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-        // Mapear Email Value Object
         builder.Property(c => c.Email)
             .HasColumnName("email")
             .HasMaxLength(256)
@@ -38,7 +37,6 @@ internal sealed class CustomerConfiguration : BaseDeletableEntityConfiguration<C
         builder.HasIndex(c => c.Email)
             .IsUnique();
 
-        // Mapear Phone Value Object
         builder.Property(c => c.Phone)
             .HasColumnName("phone")
             .HasMaxLength(20)
@@ -50,16 +48,15 @@ internal sealed class CustomerConfiguration : BaseDeletableEntityConfiguration<C
         builder.Property(c => c.Phone)
             .Metadata.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-        // Mapear Enum como string
-        builder.Property(c => c.Origem)
-            .HasColumnName("origem")
+        builder.Property(c => c.Origin)
+            .HasColumnName("origin")
             .HasMaxLength(50)
             .HasConversion(
-                origem => origem.ToString(),
-                origem => Enum.Parse<CustomerOrigem>(origem))
+                origin => origin.ToString(),
+                origin => Enum.Parse<CustomerOrigin>(origin))
             .IsRequired();
 
-        builder.Property(c => c.Origem)
+        builder.Property(c => c.Origin)
             .Metadata.SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }

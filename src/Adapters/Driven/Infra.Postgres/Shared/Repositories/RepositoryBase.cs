@@ -12,34 +12,28 @@ internal abstract class RepositoryBase<TEntity>(DebitumDbContext context)
     protected readonly DebitumDbContext Context = context;
     protected readonly DbSet<TEntity> DbSet = context.Set<TEntity>();
 
-    public virtual async Task AddAsync(TEntity entity)
+    public virtual async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        await DbSet.AddAsync(entity);
-        // SaveChanges will be called by Unit of Work
+        await DbSet.AddAsync(entity, cancellationToken);
     }
 
-    public virtual async Task<TEntity?> GetByIdAsync(string id)
+    public virtual async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellation = default)
     {
-        var entity = await DbSet.FirstOrDefaultAsync(e => e.Id == id);
-        return entity;
+        return await DbSet.FindAsync([id], cancellationToken: cancellation);
     }
 
-    public virtual async Task<TEntity?> GetByPublicIdAsync(string publicId)
+    public virtual Task<TEntity?> GetByPublicIdAsync(string publicId, CancellationToken cancellation = default)
     {
-        var entity = await DbSet
-            .FirstOrDefaultAsync(e => e.PublicId == publicId);
-
-        return entity;
+        return DbSet.FirstOrDefaultAsync(e => e.PublicId == publicId, cancellation);
     }
 
     public virtual Task UpdateAsync(TEntity entity)
     {
         DbSet.Update(entity);
-        // SaveChanges will be called by Unit of Work
         return Task.CompletedTask;
     }
 
-    public virtual Task DeleteAsync(string id)
+    public virtual Task DeleteAsync(Guid id)
     {
         var entity = DbSet.Local.FirstOrDefault(e => e.Id == id);
 
@@ -48,7 +42,6 @@ internal abstract class RepositoryBase<TEntity>(DebitumDbContext context)
             DbSet.Remove(entity);
         }
 
-        // SaveChanges will be called by Unit of Work
         return Task.CompletedTask;
     }
 }
