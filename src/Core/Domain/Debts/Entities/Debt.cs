@@ -6,6 +6,8 @@ namespace Domain.Debts.Entities;
 
 public sealed class Debt : Entity
 {
+    private readonly List<ReminderSent> _remindersSent = [];
+
     private Debt()
     {
     }
@@ -19,8 +21,10 @@ public sealed class Debt : Entity
     public string? Description { get; private set; }
     public bool IsPaid { get; private set; }
     public DateTime? PaidAt { get; private set; }
-    public DateTime? LastReminderSentAt { get; private set; }
-    public int RemindersSentCount { get; private set; }
+
+    public IReadOnlyCollection<ReminderSent> RemindersSent => _remindersSent.AsReadOnly();
+    public DateTimeOffset? LastReminderSentAt => _remindersSent.MaxBy(r => r.SentAt)?.SentAt;
+    public int RemindersSentCount => _remindersSent.Count;
 
     internal static Result<Debt> Create(decimal amount, DateTime dueDate, string? description = null)
     {
@@ -41,10 +45,14 @@ public sealed class Debt : Entity
         return Result.Ok();
     }
 
-    public Result RecordReminderSent()
+    public Result RecordReminderSent(string channel, string? message = null)
     {
-        LastReminderSentAt = DateTime.UtcNow;
-        RemindersSentCount++;
+        var reminderResult = ReminderSent.Create(channel, message);
+
+        if (reminderResult.IsFailure)
+            return reminderResult.Error;
+
+        _remindersSent.Add(reminderResult.Value);
 
         return Result.Ok();
     }

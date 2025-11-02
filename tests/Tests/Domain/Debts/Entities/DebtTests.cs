@@ -95,36 +95,43 @@ public sealed class DebtTests
     }
 
     [Fact]
-    public void RecordReminderSent_ShouldUpdateCountersAndTimestamp()
+    public void RecordReminderSent_ShouldCreateReminderSentAndUpdateCounters()
     {
         // Arrange
         var debtResult = Debt.Create(150.00m, DateTime.UtcNow.AddDays(30), null);
         var debt = debtResult.Value;
 
         // Act
-        var result = debt.RecordReminderSent();
+        var result = debt.RecordReminderSent("email", "Lembrete de pagamento");
 
         // Assert
         result.IsSuccess.Should().BeTrue();
         debt.RemindersSentCount.Should().Be(1);
+        debt.RemindersSent.Should().HaveCount(1);
         debt.LastReminderSentAt.Should().NotBeNull();
         debt.LastReminderSentAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+
+        var reminder = debt.RemindersSent.First();
+        reminder.Channel.Should().Be("email");
+        reminder.Message.Should().Be("Lembrete de pagamento");
     }
 
     [Fact]
-    public void RecordReminderSent_CalledMultipleTimes_ShouldIncrementCounter()
+    public void RecordReminderSent_CalledMultipleTimes_ShouldCreateMultipleReminders()
     {
         // Arrange
         var debtResult = Debt.Create(150.00m, DateTime.UtcNow.AddDays(30), null);
         var debt = debtResult.Value;
 
         // Act
-        debt.RecordReminderSent();
-        debt.RecordReminderSent();
-        debt.RecordReminderSent();
+        debt.RecordReminderSent("email");
+        debt.RecordReminderSent("sms");
+        debt.RecordReminderSent("whatsapp");
 
         // Assert
         debt.RemindersSentCount.Should().Be(3);
+        debt.RemindersSent.Should().HaveCount(3);
+        debt.RemindersSent.Select(r => r.Channel).Should().Contain(new[] { "email", "sms", "whatsapp" });
     }
 
     [Fact]
@@ -162,7 +169,7 @@ public sealed class DebtTests
         // Arrange
         var debtResult = Debt.Create(150.00m, DateTime.UtcNow.AddDays(-10), null);
         var debt = debtResult.Value;
-        debt.RecordReminderSent();
+        debt.RecordReminderSent("email");
 
         // Act
         var shouldSend = debt.ShouldSendReminder();

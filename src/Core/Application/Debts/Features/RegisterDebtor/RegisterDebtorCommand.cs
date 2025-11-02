@@ -7,4 +7,4 @@ public sealed record RegisterDebtorCommand(
     string Name,
     string Phone,
     string? Email
-) : ICommand<Guid>;
+) : ICommand;

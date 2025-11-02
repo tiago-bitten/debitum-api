@@ -1,3 +1,5 @@
+using API.Extensions;
+using API.Infra;
 using Application.Debts.Features.SendReminder;
 using Application.Shared.Messaging;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +10,7 @@ internal sealed class SendReminder : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/debts/{debtId}/send-reminder", HandleAsync)
+        app.MapPost("debts/{debtId:guid}/send-reminder", HandleAsync)
             .WithTags(Tags.Debts)
             .WithName("SendPaymentReminder")
             .WithSummary("Send payment reminder to debtor via WhatsApp")
@@ -30,9 +32,7 @@ internal sealed class SendReminder : IEndpoint
 
         var result = await handler.HandleAsync(command, cancellationToken);
 
-        return result.IsSuccess
-            ? Results.Ok(new { Message = "Payment reminder sent successfully" })
-            : Results.BadRequest(new { Error = result.Error.Description });
+        return result.Match(Results.NoContent, CustomResults.Problem);
     }
 }
 

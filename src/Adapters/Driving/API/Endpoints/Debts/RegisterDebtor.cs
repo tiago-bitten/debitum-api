@@ -1,3 +1,5 @@
+using API.Extensions;
+using API.Infra;
 using Application.Debts.Features.RegisterDebtor;
 using Application.Shared.Messaging;
 using Microsoft.AspNetCore.Mvc;
@@ -8,17 +10,17 @@ internal sealed class RegisterDebtor : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/debts/debtors", HandleAsync)
+        app.MapPost("/debtors", HandleAsync)
             .WithTags(Tags.Debts)
             .WithName("RegisterDebtor")
             .WithSummary("Register a new debtor")
-            .Produces<RegisterDebtorResponse>(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest);
     }
 
     private static async Task<IResult> HandleAsync(
         [FromBody] RegisterDebtorRequest request,
-        [FromServices] ICommandHandler<RegisterDebtorCommand, Guid> handler,
+        [FromServices] ICommandHandler<RegisterDebtorCommand> handler,
         CancellationToken cancellationToken)
     {
         var command = new RegisterDebtorCommand(
@@ -30,9 +32,7 @@ internal sealed class RegisterDebtor : IEndpoint
 
         var result = await handler.HandleAsync(command, cancellationToken);
 
-        return result.IsSuccess
-            ? Results.Created($"/api/debts/debtors/{result.Value}", new RegisterDebtorResponse(result.Value))
-            : Results.BadRequest(new { Error = result.Error.Description });
+        return result.Match(Results.NoContent, CustomResults.Problem);
     }
 }
 
@@ -42,5 +42,3 @@ internal sealed record RegisterDebtorRequest(
     string Phone,
     string? Email
 );
-
-internal sealed record RegisterDebtorResponse(Guid DebtorId);

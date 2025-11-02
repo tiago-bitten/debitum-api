@@ -7,9 +7,9 @@ using Domain.Shared.ValueObjects;
 namespace Application.Debts.Features.RegisterDebtor;
 
 internal sealed class RegisterDebtorHandler(IDebtorRepository debtorRepository)
-    : ICommandHandler<RegisterDebtorCommand, Guid>
+    : ICommandHandler<RegisterDebtorCommand>
 {
-    public async Task<Result<Guid>> HandleAsync(
+    public async Task<Result> HandleAsync(
         RegisterDebtorCommand command,
         CancellationToken cancellationToken = default)
     {
@@ -35,8 +35,8 @@ internal sealed class RegisterDebtorHandler(IDebtorRepository debtorRepository)
 
         var debtor = debtorResult.Value;
 
-        await debtorRepository.AddAsync(debtor);
-
-        return debtor.Id;
+        await debtorRepository.AddAsync(debtor, cancellationToken);
+        
+        return Result.Ok();
     }
 }

@@ -41,7 +41,7 @@ internal sealed class SendReminderHandler(
             return DebtErrors.ErrorSendingMessage;
         }
 
-        var recordResult = debt.RecordReminderSent();
+        var recordResult = debt.RecordReminderSent("whatsapp", message);
         if (recordResult.IsFailure)
             return recordResult.Error;
 
