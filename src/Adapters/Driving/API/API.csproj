@@ -7,8 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Driven\Infra.Postgres\Infra.Postgres.csproj"/>
-        <ProjectReference Include="..\..\Driven\Infra.WhatsApp\Infra.WhatsApp.csproj"/>
+        <ProjectReference Include="..\..\Driven\Infra.Postgres\Infra.Postgres.csproj" />
+        <ProjectReference Include="..\..\Driven\Infra.WhatsApp\Infra.WhatsApp.csproj" />
+        <ProjectReference Include="..\..\Driven\Infra.MessageBroker\Infra.MessageBroker.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -16,7 +17,9 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6"/>
+        <PackageReference Include="Quartz" Version="3.15.1" />
+        <PackageReference Include="Quartz.Extensions.Hosting" Version="3.15.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,8 @@
 using Application.Customers.Ports;
+using Application.Debts.Ports;
 using Application.Shared.Ports;
 using Infra.Postgres.Customers.Repositories;
+using Infra.Postgres.Debts.Repositories;
 using Infra.Postgres.Shared.Events;
 using Infra.Postgres.Shared.Options;
 using Infra.Postgres.Shared.Persistence;
@@ -56,6 +58,8 @@ public static class DependencyInjection
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<IDebtorRepository, DebtorRepository>();
+        services.AddScoped<IDebtRepository, DebtRepository>();
 
         return services;
     }
