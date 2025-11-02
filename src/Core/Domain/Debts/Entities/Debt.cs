@@ -57,7 +57,7 @@ public sealed class Debt : Entity
         return Result.Ok();
     }
 
-    internal bool ShouldSendReminder()
+    public bool ShouldSendReminder()
     {
         if (IsPaid) return false;
         if (DueDate > DateTime.UtcNow) return false;

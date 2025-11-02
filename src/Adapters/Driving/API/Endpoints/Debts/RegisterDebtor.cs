@@ -10,7 +10,7 @@ internal sealed class RegisterDebtor : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/debtors", HandleAsync)
+        app.MapPost("debtors", HandleAsync)
             .WithTags(Tags.Debts)
             .WithName("RegisterDebtor")
             .WithSummary("Register a new debtor")

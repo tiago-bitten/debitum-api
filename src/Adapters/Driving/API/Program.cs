@@ -1,7 +1,9 @@
 using System.Reflection;
 using API;
+using API.Configuration;
 using API.Extensions;
 using Application;
+using Infra.MessageBroker;
 using Infra.Postgres;
 using Infra.Postgres.Shared.Persistence;
 using Infra.WhatsApp;
@@ -12,8 +14,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddInfraPostgres(builder.Configuration)
     .AddInfraWhatsApp(builder.Configuration)
-    .AddApplication()
-    .AddAPI();
+    .AddInfraMessageBroker(builder.Configuration);
+
+builder.Services.AddApplication();
+
+builder.Services.AddAPI();
+
+builder.Services.AddQuartzJobs();
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
@@ -30,6 +37,8 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<DebitumDbContext>();
     await dbContext.Database.MigrateAsync();
+
+    scope.ServiceProvider.InitializeRabbitMq();
 }
 
 app.MapEndpoints();

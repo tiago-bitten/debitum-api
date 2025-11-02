@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.Postgres", "src\Adapt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.WhatsApp", "src\Adapters\Driven\Infra.WhatsApp\Infra.WhatsApp.csproj", "{7E42267F-BF9B-4584-9624-DA7C5D68002F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.MessageBroker", "src\Adapters\Driven\Infra.MessageBroker\Infra.MessageBroker.csproj", "{FAD01930-82B4-4ECF-B460-CC8C68992872}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +108,18 @@ Global
 		{7E42267F-BF9B-4584-9624-DA7C5D68002F}.Release|x64.Build.0 = Release|Any CPU
 		{7E42267F-BF9B-4584-9624-DA7C5D68002F}.Release|x86.ActiveCfg = Release|Any CPU
 		{7E42267F-BF9B-4584-9624-DA7C5D68002F}.Release|x86.Build.0 = Release|Any CPU
+		{FAD01930-82B4-4ECF-B460-CC8C68992872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAD01930-82B4-4ECF-B460-CC8C68992872}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAD01930-82B4-4ECF-B460-CC8C68992872}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FAD01930-82B4-4ECF-B460-CC8C68992872}.Debug|x64.Build.0 = Debug|Any CPU
+		{FAD01930-82B4-4ECF-B460-CC8C68992872}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FAD01930-82B4-4ECF-B460-CC8C68992872}.Debug|x86.Build.0 = Debug|Any CPU
+		{FAD01930-82B4-4ECF-B460-CC8C68992872}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAD01930-82B4-4ECF-B460-CC8C68992872}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAD01930-82B4-4ECF-B460-CC8C68992872}.Release|x64.ActiveCfg = Release|Any CPU
+		{FAD01930-82B4-4ECF-B460-CC8C68992872}.Release|x64.Build.0 = Release|Any CPU
+		{FAD01930-82B4-4ECF-B460-CC8C68992872}.Release|x86.ActiveCfg = Release|Any CPU
+		{FAD01930-82B4-4ECF-B460-CC8C68992872}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -121,5 +135,6 @@ Global
 		{752B1334-B768-4F4D-AD3B-72DC8DC9A720} = {D885DE07-50CD-49CE-B16C-A4BE599B4E61}
 		{AA6EF2F3-E3CE-407A-8507-ED01078AE4EC} = {63A31EB8-3FE2-4F9A-A198-FC412CA13076}
 		{7E42267F-BF9B-4584-9624-DA7C5D68002F} = {63A31EB8-3FE2-4F9A-A198-FC412CA13076}
+		{FAD01930-82B4-4ECF-B460-CC8C68992872} = {63A31EB8-3FE2-4F9A-A198-FC412CA13076}
 	EndGlobalSection
 EndGlobal
